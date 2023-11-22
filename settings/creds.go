@@ -70,7 +70,7 @@ func (c *Credentials) HashedKey() string {
 
 // IsValid test if Crendentials is valid
 func (c *Credentials) IsValid() bool {
-	if c.Expires < 0 || c.Status == StateInvalid || len(c.ClientID) == 0 || (len(c.Token) == 0 && len(c.ClientID) == 0) {
+	if c.Expires < 0 || c.Status == StateInvalid || len(c.ClientID) == 0 || ((len(c.Token) > 0 || len(c.ClientSecret) > 0) && len(c.ClientID) == 0) {	
 		return false
 	}
 	return !c.Expired()

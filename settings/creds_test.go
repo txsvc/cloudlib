@@ -15,6 +15,7 @@ func TestCloneCredentials(t *testing.T) {
 		ClientSecret: "s",
 		Token:        "t",
 		Expires:      10,
+		Status:       StateInit,
 	}
 	dup := cred.Clone()
 	assert.Equal(t, &cred, dup)
@@ -30,11 +31,33 @@ func TestValidation(t *testing.T) {
 		ClientSecret: "s",
 		Token:        "t",
 		Expires:      10, // forces a fail ...
+		Status:       StateInit,
 	}
 	assert.False(t, cred2.IsValid())
 
 	cred2.Expires = 0
 	assert.True(t, cred2.IsValid())
+
+	cred2.Status = StateInvalid
+	assert.False(t, cred2.IsValid())
+
+	cred2.Status = StateInit // reset
+
+	cred2.Token = ""
+	assert.True(t, cred2.IsValid())
+
+	cred2.ClientSecret = ""
+	assert.True(t, cred2.IsValid())
+
+	cred2.ClientID = ""
+	assert.False(t, cred2.IsValid())
+
+	cred2.Token = "t"
+	assert.False(t, cred2.IsValid())
+
+	cred2.Token = ""
+	cred2.ClientSecret = "s"
+	assert.False(t, cred2.IsValid())
 }
 
 func TestExpiration(t *testing.T) {
