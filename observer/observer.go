@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/txsvc/cloudlib/provider"
+	"github.com/txsvc/cloudlib"
 )
 
 const (
@@ -19,9 +19,9 @@ const (
 	LevelError
 	LevelAlert
 
-	TypeLogger        provider.ProviderType = 10
-	TypeErrorReporter provider.ProviderType = 11
-	TypeMetrics       provider.ProviderType = 12
+	TypeLogger        cloudlib.ProviderType = 10
+	TypeErrorReporter cloudlib.ProviderType = 11
+	TypeMetrics       cloudlib.ProviderType = 12
 )
 
 type (
@@ -45,19 +45,19 @@ type (
 )
 
 var (
-	observerProvider *provider.Provider
+	observerProvider *cloudlib.Provider
 )
 
-func Instance() *provider.Provider {
+func Instance() *cloudlib.Provider {
 	return observerProvider
 }
 
-func NewConfig(opts ...provider.ProviderConfig) (*provider.Provider, error) {
+func NewConfig(opts ...cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
 	if pc := validateProviders(opts...); pc != nil {
-		return nil, fmt.Errorf(provider.MsgUnsupportedProviderType, pc.Type)
+		return nil, fmt.Errorf(cloudlib.MsgUnsupportedProviderType, pc.Type)
 	}
 
-	o, err := provider.New(opts...)
+	o, err := cloudlib.New(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,15 +66,15 @@ func NewConfig(opts ...provider.ProviderConfig) (*provider.Provider, error) {
 	return o, nil
 }
 
-func UpdateConfig(opts ...provider.ProviderConfig) (*provider.Provider, error) {
+func UpdateConfig(opts ...cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
 	if pc := validateProviders(opts...); pc != nil {
-		return nil, fmt.Errorf(provider.MsgUnsupportedProviderType, pc.Type)
+		return nil, fmt.Errorf(cloudlib.MsgUnsupportedProviderType, pc.Type)
 	}
 
 	return observerProvider, Instance().RegisterProviders(true, opts...)
 }
 
-func validateProviders(opts ...provider.ProviderConfig) *provider.ProviderConfig {
+func validateProviders(opts ...cloudlib.ProviderConfig) *cloudlib.ProviderConfig {
 	for _, pc := range opts {
 		if pc.Type != TypeLogger && pc.Type != TypeErrorReporter && pc.Type != TypeMetrics {
 			return &pc // this is not one of the above i.e. not supported

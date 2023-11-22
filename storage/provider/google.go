@@ -7,13 +7,13 @@ import (
 
 	cs "cloud.google.com/go/storage"
 
-	"github.com/txsvc/cloudlib/provider"
+	"github.com/txsvc/cloudlib"
 	"github.com/txsvc/cloudlib/storage"
 )
 
 // Configure the Google Cloud Storage provider like this:
 //
-//	storageConfig := provider.WithProvider("google.cloud.storage", storage.TypeStorage, NewGoogleCloudStorageProvider)
+//	storageConfig := cloudlib.WithProvider("google.cloud.storage", storage.TypeStorage, NewGoogleCloudStorageProvider)
 //	storage.NewConfig(storageConfig)
 type (
 	// googleCloudStorageImpl provides a simple implementation in the absence of any configuration
@@ -41,7 +41,7 @@ var (
 	// This enforces a compile-time check of the provider implmentation,
 	// making sure all the methods defined in the interfaces are implemented.
 
-	_ provider.GenericProvider = (*googleCloudStorageImpl)(nil)
+	_ cloudlib.GenericProvider = (*googleCloudStorageImpl)(nil)
 
 	_ storage.StorageProvider = (*googleCloudStorageImpl)(nil)
 

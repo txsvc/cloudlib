@@ -33,7 +33,9 @@ func WriteDialSettings(ds *settings.DialSettings, path string) error {
 	}
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.MkdirAll(filepath.Dir(path), os.ModePerm)
+		if err := os.MkdirAll(filepath.Dir(path), os.ModePerm); err != nil {
+			return err
+		}
 	}
 
 	return os.WriteFile(path, buf, filePerm)
@@ -58,7 +60,9 @@ func WriteCredentials(cred *settings.Credentials, path string) error {
 	}
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.MkdirAll(filepath.Dir(path), os.ModePerm)
+		if err := os.MkdirAll(filepath.Dir(path), os.ModePerm); err != nil {
+			return err
+		}
 	}
 
 	return os.WriteFile(path, buf, filePerm)

@@ -7,17 +7,17 @@ import (
 	stackdriver_error "cloud.google.com/go/errorreporting"
 	stackdriver_logging "cloud.google.com/go/logging"
 
+	"github.com/txsvc/cloudlib"
 	"github.com/txsvc/cloudlib/observer"
-	"github.com/txsvc/cloudlib/provider"
 	"github.com/txsvc/stdlib/v2"
 )
 
 //
 // Configure the Google Stackdriver provider like this:
 //
-// loggerConfig := provider.WithProvider("google.cloud.logging", observer.TypeLogger, NewGoogleStackdriverProvider)
-// errorConfig := provider.WithProvider("google.cloud.error", observer.TypeErrorReporter, NewGoogleStackdriverProvider)
-// metricsConfig := provider.WithProvider("google.cloud.metrics", observer.TypeMetrics, NewGoogleStackdriverProvider)
+// loggerConfig := cloudlib.WithProvider("google.cloud.logging", observer.TypeLogger, NewGoogleStackdriverProvider)
+// errorConfig := cloudlib.WithProvider("google.cloud.error", observer.TypeErrorReporter, NewGoogleStackdriverProvider)
+// metricsConfig := cloudlib.WithProvider("google.cloud.metrics", observer.TypeMetrics, NewGoogleStackdriverProvider)
 // observer.NewConfig(loggerConfig, errorConfig, metricsConfig)
 //
 
@@ -40,7 +40,7 @@ var (
 	// This enforces a compile-time check of the provider implmentation,
 	// making sure all the methods defined in the interfaces are implemented.
 
-	_ provider.GenericProvider = (*stackdriverImpl)(nil)
+	_ cloudlib.GenericProvider = (*stackdriverImpl)(nil)
 
 	_ observer.ErrorReportingProvider = (*stackdriverImpl)(nil)
 	_ observer.LoggingProvider        = (*stackdriverImpl)(nil)

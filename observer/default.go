@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
 
-	"github.com/txsvc/cloudlib/provider"
+	"github.com/txsvc/cloudlib"
 )
 
 type (
@@ -24,7 +24,7 @@ var (
 	// This enforces a compile-time check of the provider implmentation,
 	// making sure all the methods defined in the interfaces are implemented.
 
-	_ provider.GenericProvider = (*defaultObserverImpl)(nil)
+	_ cloudlib.GenericProvider = (*defaultObserverImpl)(nil)
 
 	_ ErrorReportingProvider = (*defaultObserverImpl)(nil)
 	_ LoggingProvider        = (*defaultObserverImpl)(nil)
@@ -43,9 +43,9 @@ func Init() {
 	theDefaultProvider = nil
 
 	// initialize the observer with a NULL provider that prevents NPEs in case someone forgets to initialize the platform with a real provider
-	loggingConfig := provider.WithProvider("observer.default.logger", TypeLogger, NewDefaultProvider)
-	errorReportingConfig := provider.WithProvider("observer.default.errorreporting", TypeErrorReporter, NewDefaultProvider)
-	metricsConfig := provider.WithProvider("observer.default.metrics", TypeMetrics, NewDefaultProvider)
+	loggingConfig := cloudlib.WithProvider("observer.default.logger", TypeLogger, NewDefaultProvider)
+	errorReportingConfig := cloudlib.WithProvider("observer.default.errorreporting", TypeErrorReporter, NewDefaultProvider)
+	metricsConfig := cloudlib.WithProvider("observer.default.metrics", TypeMetrics, NewDefaultProvider)
 
 	if _, err := NewConfig(loggingConfig, errorReportingConfig, metricsConfig); err != nil {
 		_log.Fatal(err)
@@ -87,64 +87,6 @@ func (np *defaultObserverImpl) Log(msg string, keyValuePairs ...string) {
 	}
 	np.LogWithLevel(LevelInfo, msg, keyValuePairs...)
 }
-
-/*
-
-FIXME: remove this
-
-func (np *defaultObserverImpl) _LogWithLevel(lvl Severity, msg string, keyValuePairs ...string) {
-	if np.loggingDisabled {
-		return // just do nothing
-	}
-
-	var kv *zerolog.Array
-	if len(keyValuePairs) > 0 {
-		kv = zerolog.Arr()
-		for i := range keyValuePairs {
-			kv = kv.Str(keyValuePairs[i])
-		}
-	}
-
-	switch lvl {
-	case LevelDebug:
-		if kv != nil {
-			log.Debug().Array(ValuesLogId, kv).Msg(msg)
-		} else {
-			log.Debug().Msg(msg)
-		}
-	case LevelInfo:
-		if kv != nil {
-			log.Info().Array(ValuesLogId, kv).Msg(msg)
-		} else {
-			log.Info().Msg(msg)
-		}
-	case LevelNotice:
-		if kv != nil {
-			log.Info().Array(ValuesLogId, kv).Msg(msg)
-		} else {
-			log.Info().Msg(msg)
-		}
-	case LevelWarn:
-		if kv != nil {
-			log.Warn().Array(ValuesLogId, kv).Msg(msg)
-		} else {
-			log.Warn().Msg(msg)
-		}
-	case LevelError:
-		if kv != nil {
-			log.Error().Array(ValuesLogId, kv).Msg(msg)
-		} else {
-			log.Error().Msg(msg)
-		}
-	case LevelAlert:
-		if kv != nil {
-			log.Fatal().Array(ValuesLogId, kv).Msg(msg)
-		} else {
-			log.Fatal().Msg(msg)
-		}
-	}
-}
-*/
 
 func (np *defaultObserverImpl) LogWithLevel(lvl Severity, msg string, keyValuePairs ...string) {
 	if np.loggingDisabled {

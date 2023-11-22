@@ -8,8 +8,8 @@ import (
 	"github.com/smallstep/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/txsvc/cloudlib"
 	"github.com/txsvc/cloudlib/observer"
-	"github.com/txsvc/cloudlib/provider"
 	"github.com/txsvc/stdlib/v2"
 )
 
@@ -19,7 +19,7 @@ func TestGoogleSetup(t *testing.T) {
 }
 
 func TestLoggingImpl(t *testing.T) {
-	loggingImpl := provider.WithProvider("google.cloud.logging", observer.TypeLogger, NewGoogleStackdriverProvider)
+	loggingImpl := cloudlib.WithProvider("google.cloud.logging", observer.TypeLogger, NewGoogleStackdriverProvider)
 	assert.NotNil(t, loggingImpl)
 
 	prov, err := observer.NewConfig(loggingImpl)
@@ -30,7 +30,7 @@ func TestLoggingImpl(t *testing.T) {
 }
 
 func TestErrorReportingImpl(t *testing.T) {
-	errorConfig := provider.WithProvider("google.cloud.error", observer.TypeErrorReporter, NewGoogleStackdriverProvider)
+	errorConfig := cloudlib.WithProvider("google.cloud.error", observer.TypeErrorReporter, NewGoogleStackdriverProvider)
 	assert.NotNil(t, errorConfig)
 
 	prov, err := observer.NewConfig(errorConfig)
@@ -42,7 +42,7 @@ func TestErrorReportingImpl(t *testing.T) {
 }
 
 func TestMetricsImpl(t *testing.T) {
-	metricsConfig := provider.WithProvider("google.cloud.metrics", observer.TypeMetrics, NewGoogleStackdriverProvider)
+	metricsConfig := cloudlib.WithProvider("google.cloud.metrics", observer.TypeMetrics, NewGoogleStackdriverProvider)
 	assert.NotNil(t, metricsConfig)
 
 	prov, err := observer.NewConfig(metricsConfig)

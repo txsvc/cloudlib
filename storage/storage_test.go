@@ -78,8 +78,22 @@ func TestReader(t *testing.T) {
 	assert.NotNil(t, reader)
 }
 
+func TestDelete(t *testing.T) {
+
+	bkt := Bucket(bucket)
+	assert.NotNil(t, bkt)
+
+	obj := bkt.Object(file)
+	assert.NotNil(t, obj)
+
+	defer obj.Close()
+
+	err := obj.Delete()
+	assert.NoError(t, err)
+}
+
 func TestReaderFail(t *testing.T) {
-	cleanup()
+	//cleanup()
 
 	bkt := Bucket(bucket)
 	assert.NotNil(t, bkt)

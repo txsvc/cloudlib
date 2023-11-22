@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/txsvc/cloudlib/provider"
+	"github.com/txsvc/cloudlib"
 )
 
 type (
@@ -32,7 +32,7 @@ var (
 	// This enforces a compile-time check of the provider implmentation,
 	// making sure all the methods defined in the interfaces are implemented.
 
-	_ provider.GenericProvider = (*defaultStorageImpl)(nil)
+	_ cloudlib.GenericProvider = (*defaultStorageImpl)(nil)
 
 	_ StorageProvider = (*defaultStorageImpl)(nil)
 
@@ -49,7 +49,7 @@ func Init() {
 	theDefaultProvider = nil
 
 	// initialize the observer with a NULL provider that prevents NPEs in case someone forgets to initialize the platform with a real provider
-	storageConfig := provider.WithProvider("storage.default.storage", TypeStorage, NewDefaultProvider)
+	storageConfig := cloudlib.WithProvider("storage.default.storage", TypeStorage, NewDefaultProvider)
 
 	if _, err := NewConfig(storageConfig); err != nil {
 		log.Fatal(err)
