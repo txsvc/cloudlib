@@ -17,7 +17,7 @@ const (
 func cleanup() {
 	path := filepath.Join(bucket, file)
 	if _, err := os.Stat(path); err == nil {
-		os.Remove(path)
+		_ = os.Remove(path)
 	}
 }
 
@@ -52,7 +52,7 @@ func TestWriter(t *testing.T) {
 	obj := bkt.Object(file)
 	assert.NotNil(t, obj)
 
-	defer obj.Close()
+	defer func() { _ = obj.Close() }()
 
 	writer, err := obj.NewWriter(context.TODO())
 	assert.NoError(t, err)
@@ -71,7 +71,7 @@ func TestReader(t *testing.T) {
 	obj := bkt.Object(file)
 	assert.NotNil(t, obj)
 
-	defer obj.Close()
+	defer func() { _ = obj.Close() }()
 
 	reader, err := obj.NewReader(context.TODO())
 	assert.NoError(t, err)
@@ -86,7 +86,7 @@ func TestDelete(t *testing.T) {
 	obj := bkt.Object(file)
 	assert.NotNil(t, obj)
 
-	defer obj.Close()
+	defer func() { _ = obj.Close() }()
 
 	err := obj.Delete()
 	assert.NoError(t, err)
@@ -101,7 +101,7 @@ func TestReaderFail(t *testing.T) {
 	obj := bkt.Object(file)
 	assert.NotNil(t, obj)
 
-	defer obj.Close()
+	defer func() { _ = obj.Close() }()
 
 	reader, err := obj.NewReader(context.TODO())
 	assert.Error(t, err)

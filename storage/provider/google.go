@@ -97,21 +97,21 @@ func (obj *objImpl) Close() error {
 
 func (obj *objImpl) Delete() error {
 	if obj.reader != nil {
-		obj.reader.Close()
+		_ = obj.reader.Close()
 	}
 	if obj.writer != nil {
-		obj.writer.Close()
+		_ = obj.writer.Close()
 	}
 	return obj.handle.Delete(context.Background())
 }
 
 func (obj *objImpl) NewReader(ctx context.Context) (io.Reader, error) {
 	if obj.reader != nil {
-		obj.reader.Close()
+		_ = obj.reader.Close()
 		obj.reader = nil
 	}
 	if obj.writer != nil {
-		obj.writer.Close()
+		_ = obj.writer.Close()
 		obj.writer = nil
 	}
 
@@ -126,11 +126,11 @@ func (obj *objImpl) NewReader(ctx context.Context) (io.Reader, error) {
 
 func (obj *objImpl) NewWriter(ctx context.Context) (io.Writer, error) {
 	if obj.reader != nil {
-		obj.reader.Close()
+		_ = obj.reader.Close()
 		obj.reader = nil
 	}
 	if obj.writer != nil {
-		obj.writer.Close()
+		_ = obj.writer.Close()
 		obj.writer = nil
 	}
 

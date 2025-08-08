@@ -2,12 +2,28 @@ package rest
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewRestClient(t *testing.T) {
+func TestNewRestClientWithoutEndpoint(t *testing.T) {
+
+	// Ensure no relevant env vars are set
+	_ = os.Unsetenv(HTTP_ENDPOINT)
+
+	cl, err := NewRestClient(context.TODO())
+	assert.Nil(t, cl)
+	assert.Error(t, err)
+}
+
+func TestNewRestClientWithEndpoint(t *testing.T) {
+
+	_ = os.Setenv(HTTP_ENDPOINT, "foo.example.com")
+	defer func() {
+		_ = os.Unsetenv(HTTP_ENDPOINT)
+	}()
 
 	cl, err := NewRestClient(context.TODO())
 	assert.NotNil(t, cl)
@@ -21,8 +37,8 @@ func TestNewRestClient(t *testing.T) {
 		assert.NotEmpty(t, cl.Settings.UserAgent)
 		assert.NotEmpty(t, cl.Settings.Endpoint)
 
-		assert.NotEmpty(t, cl.Settings.Credentials.ClientID)
-		assert.NotEmpty(t, cl.Settings.Credentials.ClientSecret)
+		assert.Empty(t, cl.Settings.Credentials.ClientID)
+		assert.Empty(t, cl.Settings.Credentials.ClientSecret)
 	}
 }
 

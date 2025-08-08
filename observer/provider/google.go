@@ -88,12 +88,12 @@ func NewGoogleStackdriverProvider() interface{} {
 func (np *stackdriverImpl) Close() error {
 	if np.errorClient != nil {
 		np.errorClient.Flush()
-		np.errorClient.Close()
+		_ = np.errorClient.Close()
 	}
 	if np.loggingClient != nil {
-		np.logger.Flush()
-		np.metrics.Flush()
-		np.loggingClient.Close()
+		_ = np.logger.Flush()
+		_ = np.metrics.Flush()
+		_ = np.loggingClient.Close()
 	}
 	return nil
 }

@@ -92,7 +92,7 @@ func (obj *objImpl) Close() error {
 
 func (obj *objImpl) Delete() error {
 	if obj.file != nil {
-		obj.file.Close()
+		_ = obj.file.Close()
 	}
 	path := filepath.Join(obj.bucket, obj.name)
 	return os.Remove(path)
@@ -105,7 +105,7 @@ func (obj *objImpl) NewReader(context.Context) (io.Reader, error) {
 	}
 
 	if obj.file != nil {
-		obj.file.Close()
+		_ = obj.file.Close()
 		obj.file = nil
 	}
 
@@ -125,7 +125,7 @@ func (obj *objImpl) NewWriter(context.Context) (io.Writer, error) {
 	}
 
 	if obj.file != nil {
-		obj.file.Close()
+		_ = obj.file.Close()
 		obj.file = nil
 	}
 

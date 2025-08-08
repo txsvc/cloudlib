@@ -30,7 +30,7 @@ func TestWriteReadSettings(t *testing.T) {
 	assert.Equal(t, settings1, settings2)
 
 	// cleanup
-	os.Remove(testCredentialFile)
+	_ = os.Remove(testCredentialFile)
 }
 
 func TestWriteReadCredentials(t *testing.T) {
@@ -50,5 +50,5 @@ func TestWriteReadCredentials(t *testing.T) {
 	assert.Equal(t, cred1, cred2)
 
 	// cleanup
-	os.Remove(testCredentialFile)
+	_ = os.Remove(testCredentialFile)
 }

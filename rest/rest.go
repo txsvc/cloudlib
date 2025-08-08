@@ -148,7 +148,7 @@ func (c *RestClient) roundTrip(req *http.Request, response interface{}) (int, er
 		return resp.StatusCode, err
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	// anything other than OK, Created, Accepted, NoContent is treated as an error
 	if resp.StatusCode > http.StatusNoContent {
@@ -219,7 +219,7 @@ func (t *LoggingTransport) logRequest(req *http.Request, reqid string) {
 		return
 	}
 
-	defer req.Body.Close()
+	defer func() { _ = req.Body.Close() }()
 
 	data, err := io.ReadAll(req.Body)
 
@@ -238,7 +238,7 @@ func (t *LoggingTransport) logRequest(req *http.Request, reqid string) {
 
 func (t *LoggingTransport) logResponse(resp *http.Response, reqid string) {
 	ctx := resp.Request.Context()
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {

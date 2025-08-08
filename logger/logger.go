@@ -74,7 +74,7 @@ func (l *Logger) debug(v ...interface{}) {
 		}
 	}
 
-	fmt.Fprintln(
+	_, _ = fmt.Fprintln(
 		l.out,
 		aurora.Faint("DEBUG"),
 		fmt.Sprint(v...),
@@ -94,7 +94,7 @@ func (l *Logger) Debugf(format string, v ...interface{}) {
 }
 
 func (l *Logger) info(v ...interface{}) {
-	fmt.Fprintln(
+	_, _ = fmt.Fprintln(
 		l.out,
 		aurora.Faint("INFO"),
 		fmt.Sprint(v...),
@@ -114,7 +114,7 @@ func (l *Logger) Infof(format string, v ...interface{}) {
 }
 
 func (l *Logger) warn(v ...interface{}) {
-	fmt.Fprintln(
+	_, _ = fmt.Fprintln(
 		l.out,
 		aurora.Yellow("WARN"),
 		fmt.Sprint(v...),
@@ -134,7 +134,7 @@ func (l *Logger) Warnf(format string, v ...interface{}) {
 }
 
 func (l *Logger) error(v ...interface{}) {
-	fmt.Fprintln(
+	_, _ = fmt.Fprintln(
 		l.out,
 		aurora.Red("ERROR"),
 		fmt.Sprint(v...),
