@@ -7,8 +7,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
-
-	"github.com/txsvc/cloudlib"
+	"github.com/txsvc/stdlib/v2"
 )
 
 type (
@@ -24,7 +23,7 @@ var (
 	// This enforces a compile-time check of the provider implmentation,
 	// making sure all the methods defined in the interfaces are implemented.
 
-	_ cloudlib.GenericProvider = (*defaultObserverImpl)(nil)
+	_ stdlib.GenericProvider = (*defaultObserverImpl)(nil)
 
 	_ ErrorReportingProvider = (*defaultObserverImpl)(nil)
 	_ LoggingProvider        = (*defaultObserverImpl)(nil)
@@ -43,9 +42,9 @@ func Init() {
 	theDefaultProvider = nil
 
 	// initialize the observer with a NULL provider that prevents NPEs in case someone forgets to initialize the platform with a real provider
-	loggingConfig := cloudlib.WithProvider("observer.default.logger", TypeLogger, NewDefaultProvider)
-	errorReportingConfig := cloudlib.WithProvider("observer.default.errorreporting", TypeErrorReporter, NewDefaultProvider)
-	metricsConfig := cloudlib.WithProvider("observer.default.metrics", TypeMetrics, NewDefaultProvider)
+	loggingConfig := stdlib.WithProvider("observer.default.logger", TypeLogger, NewDefaultProvider)
+	errorReportingConfig := stdlib.WithProvider("observer.default.errorreporting", TypeErrorReporter, NewDefaultProvider)
+	metricsConfig := stdlib.WithProvider("observer.default.metrics", TypeMetrics, NewDefaultProvider)
 
 	if _, err := NewConfig(loggingConfig, errorReportingConfig, metricsConfig); err != nil {
 		_log.Fatal(err)

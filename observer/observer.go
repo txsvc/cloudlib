@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/txsvc/cloudlib"
+	"github.com/txsvc/stdlib/v2"
 )
 
 const (
@@ -19,9 +19,9 @@ const (
 	LevelError
 	LevelAlert
 
-	TypeLogger        cloudlib.ProviderType = 10
-	TypeErrorReporter cloudlib.ProviderType = 11
-	TypeMetrics       cloudlib.ProviderType = 12
+	TypeLogger        stdlib.ProviderType = 10
+	TypeErrorReporter stdlib.ProviderType = 11
+	TypeMetrics       stdlib.ProviderType = 12
 )
 
 type (
@@ -45,19 +45,19 @@ type (
 )
 
 var (
-	observerProvider *cloudlib.Provider
+	observerProvider *stdlib.Provider
 )
 
-func Instance() *cloudlib.Provider {
+func Instance() *stdlib.Provider {
 	return observerProvider
 }
 
-func NewConfig(opts ...cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
+func NewConfig(opts ...stdlib.ProviderConfig) (*stdlib.Provider, error) {
 	if pc := validateProviders(opts...); pc != nil {
-		return nil, fmt.Errorf(cloudlib.MsgUnsupportedProviderType, pc.Type)
+		return nil, fmt.Errorf(stdlib.MsgUnsupportedProviderType, pc.Type)
 	}
 
-	o, err := cloudlib.New(opts...)
+	o, err := stdlib.New(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,15 +66,15 @@ func NewConfig(opts ...cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
 	return o, nil
 }
 
-func UpdateConfig(opts ...cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
+func UpdateConfig(opts ...stdlib.ProviderConfig) (*stdlib.Provider, error) {
 	if pc := validateProviders(opts...); pc != nil {
-		return nil, fmt.Errorf(cloudlib.MsgUnsupportedProviderType, pc.Type)
+		return nil, fmt.Errorf(stdlib.MsgUnsupportedProviderType, pc.Type)
 	}
 
 	return observerProvider, Instance().RegisterProviders(true, opts...)
 }
 
-func validateProviders(opts ...cloudlib.ProviderConfig) *cloudlib.ProviderConfig {
+func validateProviders(opts ...stdlib.ProviderConfig) *stdlib.ProviderConfig {
 	for _, pc := range opts {
 		if pc.Type != TypeLogger && pc.Type != TypeErrorReporter && pc.Type != TypeMetrics {
 			return &pc // this is not one of the above i.e. not supported

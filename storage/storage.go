@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/txsvc/cloudlib"
+	"github.com/txsvc/stdlib/v2"
 )
 
 const (
-	TypeStorage cloudlib.ProviderType = 20
+	TypeStorage stdlib.ProviderType = 20
 )
 
 type (
@@ -30,15 +30,15 @@ type (
 )
 
 var (
-	storageProvider *cloudlib.Provider
+	storageProvider *stdlib.Provider
 )
 
-func NewConfig(opts cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
+func NewConfig(opts stdlib.ProviderConfig) (*stdlib.Provider, error) {
 	if opts.Type != TypeStorage {
-		return nil, fmt.Errorf(cloudlib.MsgUnsupportedProviderType, opts.Type)
+		return nil, fmt.Errorf(stdlib.MsgUnsupportedProviderType, opts.Type)
 	}
 
-	o, err := cloudlib.New(opts)
+	o, err := stdlib.New(opts)
 	if err != nil {
 		return nil, err
 	}
@@ -47,9 +47,9 @@ func NewConfig(opts cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
 	return o, nil
 }
 
-func UpdateConfig(opts cloudlib.ProviderConfig) (*cloudlib.Provider, error) {
+func UpdateConfig(opts stdlib.ProviderConfig) (*stdlib.Provider, error) {
 	if opts.Type != TypeStorage {
-		return nil, fmt.Errorf(cloudlib.MsgUnsupportedProviderType, opts.Type)
+		return nil, fmt.Errorf(stdlib.MsgUnsupportedProviderType, opts.Type)
 	}
 
 	return storageProvider, storageProvider.RegisterProviders(true, opts)
