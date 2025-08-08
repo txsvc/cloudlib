@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/smallstep/assert"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/txsvc/cloudlib"
