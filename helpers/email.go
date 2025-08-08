@@ -29,7 +29,7 @@ func MailgunSimpleEmail(sender, recipient, subject, body string) error {
 	mg := mailgun.NewMailgun(domain, apiKey)
 	mg.SetAPIBase(mailgun.APIBaseEU)
 
-	message := mg.NewMessage(sender, subject, body, recipient)
+	message := mailgun.NewMessage(sender, subject, body, recipient)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
 
